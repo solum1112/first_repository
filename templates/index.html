@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>렉시오 게임</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div id="start-screen" class="screen active">
+        </div>
+    <div id="waiting-screen" class="screen">
+        </div>
+    <div id="game-screen" class="screen">
+        </div>
+    <div id="round-result-screen" class="screen overlay">
+        </div>
+    <div id="game-over-screen" class="screen overlay">
+        </div>
+    <audio id="play-sound" src="{{ url_for('static', filename='sounds/play_card.mp3') }}" preload="auto"></audio>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
