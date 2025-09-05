@@ -1,10 +1,12 @@
 import eventlet
 eventlet.monkey_patch()
+
 import random
+from collections import Counter
+import functools
 import time
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit
-# ✨ 신규: game_logic.py에서 필요한 모든 것을 가져옵니다.
 from game_logic import Tile, get_combination_info, is_stronger_combination
 
 # ===================================================================
@@ -75,7 +77,10 @@ def handle_end_of_round(winner_index):
     socketio.emit('round_result', {
         'winner': winner_index + 1, 'payments': payments, 'money_status': player_money
     })
-    socketio.sleep(5)
+    
+    # ✨ 수정: 서버를 멈추게 하는 이 코드를 삭제합니다.
+    # socketio.sleep(5) 
+    
     return any(money <= 0 for money in player_money)
 
 def get_final_rankings():
@@ -171,6 +176,9 @@ def handle_play_hand(hand_data):
     if player_num is None or not game_state: return
     if player_num != game_state.get('current_player_index'):
         return emit('error_message', {'message': '당신의 턴이 아닙니다.'})
+    if player_num in game_state.get('players_who_passed_this_round', []):
+        return emit('error_message', {'message': '이미 패스했습니다. 다음 라운드를 기다려주세요.'})
+
     submitted_tiles = [Tile(t['suit'], t['rank']) for t in hand_data]
     combo_info = get_combination_info(submitted_tiles)
     if not combo_info[0]: return emit('error_message', {'message': '유효한 조합이 아닙니다.'})
@@ -213,6 +221,8 @@ def handle_pass_turn():
         return emit('error_message', {'message': '당신의 턴이 아닙니다.'})
     if game_state['last_played_hand_info'][0] is None:
         return emit('error_message', {'message': '라운드의 선두는 패스할 수 없습니다.'})
+    if player_num in game_state.get('players_who_passed_this_round', []):
+        return
 
     game_state['players_who_passed_this_round'].append(player_num)
     
