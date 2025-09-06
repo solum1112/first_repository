@@ -94,19 +94,32 @@ passButton.addEventListener('click', () => { socket.emit('pass_turn'); });
 
 function redrawGame(gameState) {
     if (!gameState || !gameState.player_hands || myPlayerNum === -1) return;
+
+    const myStatus = {
+        isMyTurn: gameState.current_player_index === myPlayerNum,
+        hasPassed: gameState.players_who_passed_this_round.includes(myPlayerNum),
+        isLeader: gameState.last_played_hand_info[0] === null
+    };
+
+    playButton.disabled = !myStatus.isMyTurn || myStatus.hasPassed;
+    passButton.disabled = !myStatus.isMyTurn || myStatus.hasPassed || myStatus.isLeader;
+
     myHandDiv.innerHTML = '';
     const myHand = gameState.player_hands[myPlayerNum];
     myHand.forEach(tile => createCard(tile, myHandDiv, true));
+
     boardHandDiv.innerHTML = '';
     const lastPlayedTiles = gameState.last_played_tiles;
     if (lastPlayedTiles && lastPlayedTiles.length > 0) {
         lastPlayedTiles.forEach(tile => createCard(tile, boardHandDiv, false));
     }
+
     if (gameState.current_player_index === myPlayerNum) {
         gameInfoDiv.innerHTML = `<span class="turn-indicator">당신의 턴입니다!</span>`;
     } else {
         gameInfoDiv.innerHTML = `플레이어 ${gameState.current_player_index + 1}의 턴입니다.`;
     }
+
     statusTbody.innerHTML = '';
     const numPlayers = gameState.player_hands.length;
     for (let i = 0; i < numPlayers; i++) {
@@ -130,6 +143,7 @@ function redrawGame(gameState) {
         row.innerHTML = `<td>${playerName}</td><td>${cardCount}개</td><td>${money}원</td><td>${status}</td>`;
         statusTbody.appendChild(row);
     }
+    
     logList.innerHTML = '';
     if (gameState.game_log) {
         const lastMessage = gameState.game_log[gameState.game_log.length - 1];

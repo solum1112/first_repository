@@ -22,6 +22,7 @@ h1, h2 { font-weight: 300; text-align: center; }
 .controls button { font-size: 1.2em; padding: 10px 20px; margin: 0 10px; border-radius: 5px; border: none; cursor: pointer; }
 #play-button { background-color: #27ae60; color: white; }
 #pass-button { background-color: #c0392b; color: white; }
+.controls button:disabled { background-color: #7f8c8d; cursor: not-allowed; opacity: 0.6; }
 #player-status { width: 100%; border-collapse: collapse; margin-top: 10px;}
 #player-status th, #player-status td { padding: 8px; text-align: center; border-bottom: 1px solid #4a4a4a; }
 .my-row { background-color: rgba(70, 80, 90, 0.5); }
