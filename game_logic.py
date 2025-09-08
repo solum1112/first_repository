@@ -45,7 +45,7 @@ def get_combination_info(tiles):
         ranks = [t.rank for t in tiles]
         if 1 in ranks and len(set(ranks)) == 5:
             other_four = [t for t in tiles if t.rank != 1]
-            strengths = sorted([Tile.rank_strength[t.rank] for t in other_four])
+            strengths = sorted([Tile.rank_strength[t.rank] for t in tiles])
             if len(strengths) == 4 and all(strengths[i] + 1 == strengths[i+1] for i in range(3)):
                 is_joker_flush = (len(set(t.suit for t in other_four)) == 1)
                 highest_strength = strengths[3] + 1
