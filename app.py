@@ -33,7 +33,7 @@ tiles_per_player = 0
 def start_new_game(is_first_game=True):
     global game_state, round_number, player_money
     if is_first_game:
-        player_money = [27] * num_players
+        player_money = [48] * num_players
         round_number = 1
     else:
         round_number += 1
@@ -92,7 +92,7 @@ def handle_end_of_round(winner_index):
 def get_final_rankings():
     survivors, bankrupt_players = [], []
     for i, money in enumerate(player_money):
-        if money > 0: survivors.append((money, i + 1))
+        if money >= 0: survivors.append((money, i + 1))
         else: bankrupt_players.append(i + 1)
     survivors.sort(reverse=True)
     ranking_text = [f"{rank + 1}등: 플레이어 {p_num} ({money}원)" for rank, (money, p_num) in enumerate(survivors)]
@@ -198,8 +198,7 @@ def handle_play_hand(hand_data):
     game_state.update({
         'last_played_hand_info': combo_info,
         'last_played_tiles': submitted_tiles,
-        'last_player_to_act_index': player_num,
-        'players_who_passed_this_round': [] # 패를 냈으므로 패스 기록 초기화
+        'last_player_to_act_index': player_num
     })
     
     current_hand = game_state['player_hands'][player_num]
