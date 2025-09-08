@@ -102,7 +102,8 @@ function redrawGame(gameState) {
     };
 
     playButton.disabled = !myStatus.isMyTurn || myStatus.hasPassed;
-    passButton.disabled = !myStatus.isMyTurn || myStatus.hasPassed || myStatus.isLeader;
+   // main.js 의 redrawGame 함수 내부
+    passButton.disabled = !myStatus.isMyTurn || myStatus.isLeader;
 
     myHandDiv.innerHTML = '';
     const myHand = gameState.player_hands[myPlayerNum];
