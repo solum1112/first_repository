@@ -43,6 +43,7 @@ def get_combination_info(tiles):
     if num_tiles == 3 and all_ranks_are_same(tiles): return ("트리플", highest_tile)
     if num_tiles == 5:
         ranks = [t.rank for t in tiles]
+        sorted_ranks = sorted(ranks)
         if 1 in ranks and len(set(ranks)) == 5:
             other_four = [t for t in tiles if t.rank != 1]
             strengths = sorted([Tile.rank_strength[t.rank] for t in other_four])
@@ -55,6 +56,8 @@ def get_combination_info(tiles):
                     virtual_rep_tile = Tile(max(tiles).suit, virtual_rank)
                     if is_joker_flush: return ("스트레이트 플러쉬", virtual_rep_tile)
                     else: return ("스트레이트", virtual_rep_tile)
+        if sorted_ranks = [1,2,3,4,5] or [2,3,4,5,6]:
+            return ('스트레이트',highest_tiles)
         rank_counts = Counter(rank for rank in ranks)
         counts_values = sorted(rank_counts.values())
         is_straight, is_flush = ranks_are_sequential(tiles), all_suits_are_same(tiles)
